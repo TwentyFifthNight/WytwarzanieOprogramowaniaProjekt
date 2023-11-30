@@ -20,18 +20,13 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
-    public StudentEntity getStudentByName(String name) {
-        return studentRepository.findByName(name);
+    public StudentEntity getStudentByPesel(String pesel) {
+        return studentRepository.findByPesel(pesel);
     }
 
     @Override
     public List<StudentEntity> getAllStudents() {
         return studentRepository.findAll();
-    }
-
-    @Override
-    public boolean exists(String name) {
-        return studentRepository.findByName(name) != null;
     }
 
     @Override
@@ -46,5 +41,10 @@ public class StudentServiceImpl implements StudentService {
             throw new IllegalArgumentException("Student with given id not found");
 
         return student.getScores().stream().mapToDouble(x -> x).average().orElse(0);
+    }
+
+    @Override
+    public void deleteStudent(Long id) {
+
     }
 }

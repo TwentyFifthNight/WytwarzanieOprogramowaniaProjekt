@@ -29,14 +29,8 @@ public class StudentRestController {
 
     @GetMapping("/students/{name}")
     @ResponseBody
-    public StudentEntity getStudent(@PathVariable("name") String name) {
-        try{
-            Long id = Long.valueOf(name);
-            return studentService.getStudentById(id);
-        }catch (Exception e){
-            System.out.println(e.getMessage());
-            return studentService.getStudentByName(name);
-        }
+    public StudentEntity getStudent(@PathVariable("pesel") String pesel) {
+        return studentService.getStudentByPesel(pesel);
     }
 
     @GetMapping("/students/average/{id}")
