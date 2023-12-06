@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -15,13 +16,11 @@ public class StudentServiceImpl implements StudentService {
     private StudentRepository studentRepository;
 
     @Override
-    public StudentEntity getStudentById(Long id) {
-        return studentRepository.findById(id).orElse(null);
-    }
-
-    @Override
-    public StudentEntity getStudentByPesel(String pesel) {
-        return studentRepository.findByPesel(pesel);
+    public StudentEntity getStudentById(Long id) throws IllegalArgumentException{
+        Optional<StudentEntity> student = studentRepository.findById(id);
+        if(student.isEmpty())
+            throw new IllegalArgumentException("Student with given id not found");
+        return student.get();
     }
 
     @Override
@@ -35,16 +34,27 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
-    public double getStudentScoreAverage(Long id) {
+    public double getStudentScoreAverage(Long id) throws IllegalArgumentException, IllegalStateException{
         StudentEntity student = getStudentById(id);
-        if(student == null)
-            throw new IllegalArgumentException("Student with given id not found");
-
+        if(student.getScores().isEmpty())
+            throw new IllegalStateException("Student grade list is empty");
         return student.getScores().stream().mapToDouble(x -> x).average().orElse(0);
     }
 
     @Override
-    public void deleteStudent(Long id) {
+    public StudentEntity deleteStudent(Long id) throws IllegalArgumentException{
+        StudentEntity student = getStudentById(id);
+        studentRepository.delete(student);
+        return student;
+    }
 
+    @Override
+    public StudentEntity updateStudent(Long id, StudentEntity student) throws IllegalArgumentException{
+        StudentEntity studentToUpdate = getStudentById(id);
+        studentToUpdate.setSurname(student.getSurname());
+        studentToUpdate.setName(student.getName());
+        studentToUpdate.setPesel(student.getPesel());
+        studentToUpdate.setScores(student.getScores());
+        return studentRepository.save(studentToUpdate);
     }
 }

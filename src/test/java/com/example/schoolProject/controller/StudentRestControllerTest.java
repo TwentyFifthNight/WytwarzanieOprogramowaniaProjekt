@@ -14,19 +14,18 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
         classes = SchoolProjectApplication.class)
 @AutoConfigureMockMvc
 @EnableAutoConfiguration(exclude= SecurityAutoConfiguration.class)
-@TestPropertySource(locations = "classpath:application-test.properties")
+@TestPropertySource(locations = "classpath:application-tests.properties")
 @AutoConfigureTestDatabase
 class StudentRestControllerTest {
     @Autowired
@@ -36,24 +35,36 @@ class StudentRestControllerTest {
 
     @Test
     public void whenValidInput_thenCreateStudent() throws Exception {
+        String name = "Jan";
+        String surname = "Kowalski";
 
         ObjectMapper objectMapper = new ObjectMapper();
         StudentEntity john = new StudentEntity();
         john.setId(null);
-        john.setName("John");
-        john.setSurname("Smith");
-        john.setScores(new ArrayList<>(){
+        john.setName(name);
+        john.setSurname(surname);
+
+        List<Double> scores = new ArrayList<>(){
             {
                 add(2.0);
+                add(4.5);
             }
-        });
+        };
+
+        john.setScores(scores);
 
         mvc.perform(post("/api/students")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(john)));
         List<StudentEntity> found = repository.findAll();
 
+        assertThat(found).extracting(StudentEntity::getId)
+                .isNotNull();
         assertThat(found).extracting(StudentEntity::getName)
-                .contains("John Smiths");
+                .contains(name);
+        assertThat(found).extracting(StudentEntity::getSurname)
+                .contains(surname);
+        assertThat(found).extracting(StudentEntity::getScores)
+                .contains(scores);
     }
 }
