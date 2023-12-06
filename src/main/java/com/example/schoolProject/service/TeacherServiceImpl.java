@@ -27,13 +27,26 @@ public class TeacherServiceImpl implements TeacherService {
         return teacherRepository.findAll();
     }
 
-    @Override
-    public boolean exists(String name) {
-        return teacherRepository.findByName(name) != null;
-    }
 
     @Override
     public TeacherEntity save(TeacherEntity teacher) {
         return teacherRepository.save(teacher);
+    }
+
+    @Override
+    public void deleteTeacherById(Long id) {
+        teacherRepository.deleteById(id);
+    }
+
+    @Override
+    public boolean exists(Long id) {
+        return teacherRepository.existsById(id);
+    }
+
+    @Override
+    public TeacherEntity updateTeacher(Long id, TeacherEntity updatedTeacher) {
+        TeacherEntity existingTeacher = teacherRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Teacher not found with id: " + id));
+        return teacherRepository.save(existingTeacher);
     }
 }

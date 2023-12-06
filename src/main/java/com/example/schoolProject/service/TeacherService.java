@@ -10,7 +10,11 @@ public interface TeacherService {
     TeacherEntity getTeacherById(Long id);
     TeacherEntity getTeacherByName(String name);
     List<TeacherEntity> getAllTeachers();
-    boolean exists(String name);
+    boolean exists(Long id);
     TeacherEntity save(TeacherEntity teacher);
+    void deleteTeacherById(Long id);
+    TeacherEntity updateTeacher(Long id, TeacherEntity updatedTeacher);
+
+
 
 }

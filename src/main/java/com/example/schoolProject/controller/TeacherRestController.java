@@ -27,15 +27,46 @@ public class TeacherRestController {
         return teacherService.getAllTeachers();
     }
 
-    @GetMapping("/teachers/{name}")
+    @GetMapping("/teachers/{id}")
     @ResponseBody
-    public TeacherEntity getTeacher(@PathVariable("name") String name) {
-        try{
-            Long id = Long.valueOf(name);
-            return teacherService.getTeacherById(id);
-        }catch (Exception e){
-            System.out.println(e.getMessage());
-            return teacherService.getTeacherByName(name);
+    public ResponseEntity<TeacherEntity> getTeacherById(@PathVariable("id") Long id) {
+        TeacherEntity teacherById = teacherService.getTeacherById(id);
+        if (teacherById != null) {
+            return ResponseEntity.ok(teacherById);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+
+    @DeleteMapping("/teachers/{id}")
+    public ResponseEntity<String> deleteTeacher(@PathVariable("id") Long id) {
+        HttpStatus status = HttpStatus.OK;
+        if (teacherService.exists(id)) {
+            teacherService.deleteTeacherById(id);
+            return new ResponseEntity<>("Teacher deleted successfully", status);
+        } else {
+            status = HttpStatus.NOT_FOUND;
+            return new ResponseEntity<>("Teacher not found", status);
+        }
+    }
+
+    @PutMapping("/teachers/{id}")
+    public ResponseEntity<?> updateTeacher(
+            @PathVariable("id") Long id,
+            @RequestBody TeacherEntity updatedTeacher) {
+        HttpStatus status = HttpStatus.OK;
+        if (teacherService.exists(id)) {
+            TeacherEntity existingTeacher = teacherService.getTeacherById(id);
+            existingTeacher.setName(updatedTeacher.getName());
+            existingTeacher.setSurname(updatedTeacher.getSurname());
+            existingTeacher.setSubject(updatedTeacher.getSubject());
+
+            TeacherEntity saved = teacherService.save(existingTeacher);
+            return new ResponseEntity<>("Teacher updated successfully", status);
+        } else {
+            status = HttpStatus.NOT_FOUND;
+            return ResponseEntity.status(status).body("Teacher not found");
         }
     }
 }
