@@ -6,9 +6,10 @@ import java.util.List;
 
 public interface StudentService {
     StudentEntity getStudentById(Long id);
-    StudentEntity getStudentByName(String name);
+    StudentEntity getStudentByPesel(String pesel);
     List<StudentEntity> getAllStudents();
-    boolean exists(String name);
     StudentEntity save(StudentEntity student);
     double getStudentScoreAverage(Long id);
+
+    void deleteStudent(Long id);
 }

@@ -15,9 +15,16 @@ public class StudentEntity {
     private Long id;
     private String name;
     private String surname;
+    private String pesel;
     private List<Double> scores;
 
     public StudentEntity(){
         scores = new ArrayList<>();
+    }
+
+    public void addScore(double score){
+        if(score > 5.0 || score < 2.0)
+            throw new IllegalArgumentException("Invalid score value");
+        scores.add(score);
     }
 }
