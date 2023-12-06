@@ -3,18 +3,14 @@ package com.example.schoolProject.domain;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class StudentEntityTest {
 
     private StudentEntity student;
-    SimpleDateFormat formatter
-            = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
 
     @BeforeEach
     void setUp() {
@@ -25,10 +21,14 @@ class StudentEntityTest {
     void givenStudent_whenNewStudent_thenStudentNotNullAndScoresNotNull() {
         assertNotNull(student);
         assertNotNull(student.getScores());
+        assertNull(student.getId());
+        assertNull(student.getName());
+        assertNull(student.getSurname());
+        assertNull(student.getPesel());
     }
 
     @Test
-    void givenStudent_whenSetValues_thenGetValues(){
+    void givenStudent_whenSetValues_thenGetValues() {
         Long id = 1L;
         String name = "Adam";
         String surname = "Kowalski";
@@ -43,8 +43,8 @@ class StudentEntityTest {
     }
 
     @Test
-    void givenStudent_whenAddInvalidScore_thenThrowInvalidArgument(){
-        List<Double> invalidScores = new ArrayList<>(){
+    void givenStudent_whenAddInvalidScore_thenThrowInvalidArgument() {
+        List<Double> invalidScores = new ArrayList<>() {
             {
                 add(5.1);
                 add(1.9);
@@ -54,8 +54,8 @@ class StudentEntityTest {
     }
 
     @Test
-    void givenStudent_whenAddValidScore_thenGetScores(){
-        List<Double> scores = new ArrayList<>(){
+    void givenStudent_whenAddValidScore_thenGetScores() {
+        List<Double> scores = new ArrayList<>() {
             {
                 add(5.0);
                 add(2.0);
@@ -68,8 +68,8 @@ class StudentEntityTest {
     }
 
     @Test
-    void givenStudent_whenSetValidScores_thenGetScores(){
-        List<Double> scores = new ArrayList<>(){
+    void givenStudent_whenSetValidScores_thenGetScores() {
+        List<Double> scores = new ArrayList<>() {
             {
                 add(5.0);
                 add(2.0);
