@@ -10,63 +10,54 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/teachers")
+@RequestMapping("/api/teacher")
 public class TeacherRestController {
     @Autowired
     private TeacherService teacherService;
 
     @PostMapping
-    public ResponseEntity<TeacherEntity> createTeacher(@RequestBody TeacherEntity teacher) {
-        HttpStatus status = HttpStatus.CREATED;
-        TeacherEntity saved = teacherService.save(teacher);
-        return new ResponseEntity<>(saved, status);
-    }
-
-    @GetMapping
-    public List<TeacherEntity> getAllTeachers() {
-        return teacherService.getAllTeachers();
-    }
-
-    @GetMapping("/{id}")
-    @ResponseBody
-    public ResponseEntity<TeacherEntity> getTeacherById(@PathVariable("id") Long id) {
-        TeacherEntity teacherById = teacherService.getTeacherById(id);
-        if (teacherById != null) {
-            return ResponseEntity.ok(teacherById);
-        } else {
-            return ResponseEntity.notFound().build();
+    public ResponseEntity<Object> createTeacher(@RequestBody TeacherEntity teacher) {
+        try {
+            TeacherEntity saved = teacherService.save(teacher);
+            return new ResponseEntity<>(saved, HttpStatus.CREATED);
+        } catch (IllegalArgumentException e) {
+            return new ResponseEntity<>(e.getMessage() ,HttpStatus.BAD_REQUEST);
         }
     }
 
+    @GetMapping
+    public ResponseEntity<List<TeacherEntity>> getAllTeachers() {
+        return new ResponseEntity<>(teacherService.getAllTeachers(), HttpStatus.OK);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Object> getTeacherById(@PathVariable("id") Long id) {
+        try {
+            return new ResponseEntity<>(teacherService.getTeacherById(id), HttpStatus.OK);
+        } catch (IllegalArgumentException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+        }
+    }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteTeacher(@PathVariable("id") Long id) {
-        HttpStatus status = HttpStatus.OK;
-        if (teacherService.exists(id)) {
+    public ResponseEntity<Object> deleteTeacher(@PathVariable("id") Long id) {
+        try {
             teacherService.deleteTeacherById(id);
-            return new ResponseEntity<>("Teacher deleted successfully", status);
-        } else {
-            status = HttpStatus.NOT_FOUND;
-            return new ResponseEntity<>("Teacher not found", status);
+            return new ResponseEntity<>("Teacher deleted successfully", HttpStatus.OK);
+        } catch (IllegalArgumentException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
         }
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> updateTeacher(
+    public ResponseEntity<Object> updateTeacher(
             @PathVariable("id") Long id,
             @RequestBody TeacherEntity updatedTeacher) {
-        HttpStatus status = HttpStatus.OK;
-        if (teacherService.exists(id)) {
-            TeacherEntity existingTeacher = teacherService.getTeacherById(id);
-            existingTeacher.setName(updatedTeacher.getName());
-            existingTeacher.setSurname(updatedTeacher.getSurname());
-            existingTeacher.setSubject(updatedTeacher.getSubject());
-
-            TeacherEntity saved = teacherService.save(existingTeacher);
-            return new ResponseEntity<>("Teacher updated successfully", status);
-        } else {
-            status = HttpStatus.NOT_FOUND;
-            return ResponseEntity.status(status).body("Teacher not found");
+        try {
+            TeacherEntity teacher = teacherService.updateTeacher(id, updatedTeacher);
+            return new ResponseEntity<>(teacher, HttpStatus.OK);
+        } catch (IllegalArgumentException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
         }
     }
 }

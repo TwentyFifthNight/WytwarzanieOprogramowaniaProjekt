@@ -19,6 +19,7 @@ public class TeacherEntityTest {
         assertNull(teacher.getName());
         assertNull(teacher.getSurname());
         assertNull(teacher.getSubject());
+        assertNull(teacher.getPesel());
     }
 
     @Test
@@ -27,15 +28,18 @@ public class TeacherEntityTest {
         String name = "Jan";
         String surname = "Duzy";
         String subject = "Matematyka";
+        String pesel = "12312312312";
 
         teacher.setId(id);
         teacher.setName(name);
         teacher.setSurname(surname);
         teacher.setSubject(subject);
+        teacher.setPesel(pesel);
 
         assertEquals(id, teacher.getId());
         assertEquals(name, teacher.getName());
         assertEquals(surname, teacher.getSurname());
         assertEquals(subject, teacher.getSubject());
+        assertEquals(pesel, teacher.getPesel());
     }
 }

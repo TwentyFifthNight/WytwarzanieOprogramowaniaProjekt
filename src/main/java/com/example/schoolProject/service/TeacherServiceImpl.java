@@ -4,8 +4,10 @@ import com.example.schoolProject.domain.TeacherEntity;
 import com.example.schoolProject.repository.TeacherRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.dao.DataIntegrityViolationException;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class TeacherServiceImpl implements TeacherService {
@@ -14,12 +16,11 @@ public class TeacherServiceImpl implements TeacherService {
 
     @Override
     public TeacherEntity getTeacherById(Long id) {
-        return teacherRepository.findById(id).orElse(null);
-    }
-
-    @Override
-    public TeacherEntity getTeacherByName(String name) {
-        return teacherRepository.findByName(name);
+        Optional<TeacherEntity> teacher = teacherRepository.findById(id);
+        if (teacher.isEmpty()) {
+            throw new IllegalArgumentException("Teacher with given id not found!");
+        }
+        return teacher.get();
     }
 
     @Override
@@ -27,14 +28,20 @@ public class TeacherServiceImpl implements TeacherService {
         return teacherRepository.findAll();
     }
 
-
     @Override
     public TeacherEntity save(TeacherEntity teacher) {
-        return teacherRepository.save(teacher);
+        try {
+            return teacherRepository.save(teacher);
+        } catch (DataIntegrityViolationException e) {
+            throw new IllegalArgumentException("Required fields are missing or duplicate entry!");
+        }
     }
 
     @Override
     public void deleteTeacherById(Long id) {
+        if (!exists(id)) {
+            throw new IllegalArgumentException("Teacher with given id not found!");
+        }
         teacherRepository.deleteById(id);
     }
 
@@ -45,8 +52,10 @@ public class TeacherServiceImpl implements TeacherService {
 
     @Override
     public TeacherEntity updateTeacher(Long id, TeacherEntity updatedTeacher) {
-        TeacherEntity existingTeacher = teacherRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Teacher not found with id: " + id));
+        TeacherEntity existingTeacher = getTeacherById(id);
+        existingTeacher.setName(updatedTeacher.getName());
+        existingTeacher.setSurname(updatedTeacher.getSurname());
+        existingTeacher.setSubject(updatedTeacher.getSubject());
         return teacherRepository.save(existingTeacher);
     }
 }

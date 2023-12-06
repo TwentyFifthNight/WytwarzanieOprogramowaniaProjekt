@@ -8,7 +8,6 @@ import java.util.List;
 @Transactional
 public interface TeacherService {
     TeacherEntity getTeacherById(Long id);
-    TeacherEntity getTeacherByName(String name);
     List<TeacherEntity> getAllTeachers();
     boolean exists(Long id);
     TeacherEntity save(TeacherEntity teacher);
