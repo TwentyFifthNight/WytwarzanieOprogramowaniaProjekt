@@ -10,24 +10,24 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/teachers")
 public class TeacherRestController {
     @Autowired
     private TeacherService teacherService;
 
-    @PostMapping("/teachers")
+    @PostMapping
     public ResponseEntity<TeacherEntity> createTeacher(@RequestBody TeacherEntity teacher) {
         HttpStatus status = HttpStatus.CREATED;
         TeacherEntity saved = teacherService.save(teacher);
         return new ResponseEntity<>(saved, status);
     }
 
-    @GetMapping("/teachers")
+    @GetMapping
     public List<TeacherEntity> getAllTeachers() {
         return teacherService.getAllTeachers();
     }
 
-    @GetMapping("/teachers/{id}")
+    @GetMapping("/{id}")
     @ResponseBody
     public ResponseEntity<TeacherEntity> getTeacherById(@PathVariable("id") Long id) {
         TeacherEntity teacherById = teacherService.getTeacherById(id);
@@ -39,7 +39,7 @@ public class TeacherRestController {
     }
 
 
-    @DeleteMapping("/teachers/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteTeacher(@PathVariable("id") Long id) {
         HttpStatus status = HttpStatus.OK;
         if (teacherService.exists(id)) {
@@ -51,7 +51,7 @@ public class TeacherRestController {
         }
     }
 
-    @PutMapping("/teachers/{id}")
+    @PutMapping("/{id}")
     public ResponseEntity<?> updateTeacher(
             @PathVariable("id") Long id,
             @RequestBody TeacherEntity updatedTeacher) {
