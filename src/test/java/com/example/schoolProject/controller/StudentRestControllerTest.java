@@ -128,6 +128,8 @@ class StudentRestControllerTest {
 
     @Test
     public void givenStudents_whenStudentWithoutNameAndSurname_thenStatus400() throws Exception {
+        ObjectMapper mapper = new ObjectMapper();
+
         StudentEntity student1 = new StudentEntity();
         student1.setPesel("02221565579");
         student1.setSurname("Kowal");
@@ -136,13 +138,13 @@ class StudentRestControllerTest {
         student2.setName("Anna");
 
         mvc.perform(post("/api/student")
-                        .content(new ObjectMapper().writeValueAsString(student1))
+                        .content(mapper.writeValueAsString(student1))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isBadRequest());
 
         mvc.perform(post("/api/student")
-                        .content(new ObjectMapper().writeValueAsString(student2))
+                        .content(mapper.writeValueAsString(student2))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isBadRequest());
@@ -150,6 +152,8 @@ class StudentRestControllerTest {
 
     @Test
     public void givenStudents_whenStudentsWithSamePesel_thenStatus400() throws Exception {
+        ObjectMapper mapper = new ObjectMapper();
+
         String pesel = "02221565579";
         StudentEntity student1 = new StudentEntity();
         student1.setPesel(pesel);
@@ -161,13 +165,13 @@ class StudentRestControllerTest {
         student2.setSurname("Jabłońska");
 
         mvc.perform(post("/api/student")
-                        .content(new ObjectMapper().writeValueAsString(student1))
+                        .content(mapper.writeValueAsString(student1))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isCreated());
 
         mvc.perform(post("/api/student")
-                        .content(new ObjectMapper().writeValueAsString(student2))
+                        .content(mapper.writeValueAsString(student2))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isBadRequest());
