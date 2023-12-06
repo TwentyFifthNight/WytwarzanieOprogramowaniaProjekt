@@ -6,11 +6,6 @@ import lombok.Data;
 @Entity
 @Table(name = "teacher")
 @Data
-public class TeacherEntity {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
-    private String name;
-    private String surname;
+public class TeacherEntity extends PersonEntity{
     private String subject;
 }
