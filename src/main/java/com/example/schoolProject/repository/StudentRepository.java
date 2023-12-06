@@ -10,6 +10,5 @@ import java.util.List;
 @Repository
 @Transactional
 public interface StudentRepository extends JpaRepository<StudentEntity, Long> {
-    StudentEntity findByPesel(String pesel);
     List<StudentEntity> findAll();
 }

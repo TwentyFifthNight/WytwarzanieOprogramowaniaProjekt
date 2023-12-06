@@ -5,7 +5,6 @@ import org.junit.jupiter.api.Test;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -23,9 +22,9 @@ class StudentEntityTest {
     }
 
     @Test
-    void testDefaultConstructor() {
+    void givenStudent_whenNewStudent_thenStudentNotNullAndScoresNotNull() {
         assertNotNull(student);
-        assertNull(student.getScores());
+        assertNotNull(student.getScores());
     }
 
     @Test
