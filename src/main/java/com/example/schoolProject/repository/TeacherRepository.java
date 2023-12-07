@@ -10,6 +10,5 @@ import java.util.List;
 @Repository
 @Transactional
 public interface TeacherRepository extends JpaRepository<TeacherEntity, Long> {
-    TeacherEntity findByName(String name);
-
+    List<TeacherEntity> findAll();
 }

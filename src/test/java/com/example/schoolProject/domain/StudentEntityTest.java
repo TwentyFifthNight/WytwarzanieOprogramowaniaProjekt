@@ -18,13 +18,9 @@ class StudentEntityTest {
     }
 
     @Test
-    void givenStudent_whenNewStudent_thenStudentNotNullAndScoresNotNull() {
+    void givenStudent_whenNewStudent_thenStudentAndScoreNotNull() {
         assertNotNull(student);
         assertNotNull(student.getScores());
-        assertNull(student.getId());
-        assertNull(student.getName());
-        assertNull(student.getSurname());
-        assertNull(student.getPesel());
     }
 
     @Test

@@ -3,7 +3,6 @@ package com.example.schoolProject.controller;
 import com.example.schoolProject.SchoolProjectApplication;
 import com.example.schoolProject.domain.TeacherEntity;
 import com.example.schoolProject.repository.TeacherRepository;
-import com.example.schoolProject.service.TeacherService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,14 +33,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @TestPropertySource(locations = "classpath:application-tests.properties")
 @AutoConfigureTestDatabase
 class TeacherRestControllerTest {
-
     @Autowired
     private MockMvc mvc;
-
     @Autowired
     private TeacherRepository repository;
-    @Autowired
-    private TeacherService teacherService;
 
     @Test
     public void whenValidInput_thenCreateTeacher() throws Exception {
@@ -50,16 +45,16 @@ class TeacherRestControllerTest {
         String subject = "Math";
         String pesel = "12345678907";
 
-        ObjectMapper objectMapper = new ObjectMapper();
         TeacherEntity teacher = new TeacherEntity();
         teacher.setName(name);
         teacher.setSurname(surname);
         teacher.setSubject(subject);
         teacher.setPesel(pesel);
 
+        ObjectMapper mapper = new ObjectMapper();
         mvc.perform(post("/api/teacher")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(teacher)))
+                        .content(mapper.writeValueAsString(teacher)))
                 .andExpect(status().isCreated());
 
         List<TeacherEntity> found = repository.findAll();
@@ -84,8 +79,8 @@ class TeacherRestControllerTest {
         teacher2.setSubject("Science");
         teacher2.setPesel("10987654321");
 
-        repository.save(teacher1);
-        repository.save(teacher2);
+        repository.saveAndFlush(teacher1);
+        repository.saveAndFlush(teacher2);
 
         mvc.perform(get("/api/teacher")
                         .contentType(MediaType.APPLICATION_JSON))
@@ -127,14 +122,15 @@ class TeacherRestControllerTest {
         teacherWithoutNameAndSurname2.setSurname("Smith");
         teacherWithoutNameAndSurname2.setPesel("98765432105");
 
+        ObjectMapper mapper = new ObjectMapper();
         mvc.perform(post("/api/teacher")
-                        .content(new ObjectMapper().writeValueAsString(teacherWithoutNameAndSurname1))
+                        .content(mapper.writeValueAsString(teacherWithoutNameAndSurname1))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isBadRequest());
 
         mvc.perform(post("/api/teacher")
-                        .content(new ObjectMapper().writeValueAsString(teacherWithoutNameAndSurname2))
+                        .content(mapper.writeValueAsString(teacherWithoutNameAndSurname2))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isBadRequest());
@@ -148,22 +144,21 @@ class TeacherRestControllerTest {
         teacher1.setSubject("Math");
         teacher1.setPesel("12345676902");
 
-        teacherService.save(teacher1);
-
         TeacherEntity teacher2 = new TeacherEntity();
         teacher2.setName("Alice");
         teacher2.setSurname("Smith");
         teacher2.setSubject("Physics");
         teacher2.setPesel("12345676902");
 
+        ObjectMapper mapper = new ObjectMapper();
         mvc.perform(post("/api/teacher")
-                        .content(new ObjectMapper().writeValueAsString(teacher1))
+                        .content(mapper.writeValueAsString(teacher1))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isCreated());
 
         mvc.perform(post("/api/teacher")
-                        .content(new ObjectMapper().writeValueAsString(teacher2))
+                        .content(mapper.writeValueAsString(teacher2))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isBadRequest());
