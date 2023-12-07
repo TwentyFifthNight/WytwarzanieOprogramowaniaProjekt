@@ -42,7 +42,7 @@ public class TeacherRestController {
     @DeleteMapping("/{id}")
     public ResponseEntity<Object> deleteTeacher(@PathVariable("id") Long id) {
         try {
-            teacherService.deleteTeacherById(id);
+            teacherService.deleteTeacher(id);
             return new ResponseEntity<>("Teacher deleted successfully", HttpStatus.OK);
         } catch (IllegalArgumentException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);

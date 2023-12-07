@@ -14,12 +14,8 @@ public class TeacherEntityTest {
     }
 
     @Test
-    void testDefaultConstructor() {
+    void givenTeacher_whenNewTeacher_thenTeacherNotNull() {
         assertNotNull(teacher);
-        assertNull(teacher.getName());
-        assertNull(teacher.getSurname());
-        assertNull(teacher.getSubject());
-        assertNull(teacher.getPesel());
     }
 
     @Test

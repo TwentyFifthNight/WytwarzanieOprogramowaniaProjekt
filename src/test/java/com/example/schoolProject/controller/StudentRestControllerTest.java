@@ -50,7 +50,6 @@ class StudentRestControllerTest {
                 add(4.5);
             }
         };
-        ObjectMapper objectMapper = new ObjectMapper();
         StudentEntity jan = new StudentEntity();
         jan.setId(null);
         jan.setName(name);
@@ -58,6 +57,7 @@ class StudentRestControllerTest {
         jan.setScores(scores);
         jan.setPesel(pesel);
 
+        ObjectMapper objectMapper = new ObjectMapper();
         mvc.perform(post("/api/student")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(jan)));
@@ -118,7 +118,6 @@ class StudentRestControllerTest {
         student1.setName("Adam");
         student1.setSurname("Kowalski");
 
-
         mvc.perform(post("/api/student")
                         .content(new ObjectMapper().writeValueAsString(student1))
                         .contentType(MediaType.APPLICATION_JSON))
@@ -128,8 +127,6 @@ class StudentRestControllerTest {
 
     @Test
     public void givenStudents_whenStudentWithoutNameAndSurname_thenStatus400() throws Exception {
-        ObjectMapper mapper = new ObjectMapper();
-
         StudentEntity student1 = new StudentEntity();
         student1.setPesel("02221565579");
         student1.setSurname("Kowal");
@@ -137,6 +134,7 @@ class StudentRestControllerTest {
         student2.setPesel("02221565540");
         student2.setName("Anna");
 
+        ObjectMapper mapper = new ObjectMapper();
         mvc.perform(post("/api/student")
                         .content(mapper.writeValueAsString(student1))
                         .contentType(MediaType.APPLICATION_JSON))
@@ -152,8 +150,6 @@ class StudentRestControllerTest {
 
     @Test
     public void givenStudents_whenStudentsWithSamePesel_thenStatus400() throws Exception {
-        ObjectMapper mapper = new ObjectMapper();
-
         String pesel = "02221565579";
         StudentEntity student1 = new StudentEntity();
         student1.setPesel(pesel);
@@ -164,6 +160,7 @@ class StudentRestControllerTest {
         student2.setName("Anna");
         student2.setSurname("Jabłońska");
 
+        ObjectMapper mapper = new ObjectMapper();
         mvc.perform(post("/api/student")
                         .content(mapper.writeValueAsString(student1))
                         .contentType(MediaType.APPLICATION_JSON))
