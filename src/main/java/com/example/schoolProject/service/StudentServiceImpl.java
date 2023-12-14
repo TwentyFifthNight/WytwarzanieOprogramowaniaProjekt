@@ -30,7 +30,7 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
-    public StudentEntity save(StudentEntity student) {
+    public StudentEntity save(StudentEntity student){
         if (student.getPesel() == null)
             throw new DataIntegrityViolationException("Pesel is required!");
         if (student.getName() == null)
