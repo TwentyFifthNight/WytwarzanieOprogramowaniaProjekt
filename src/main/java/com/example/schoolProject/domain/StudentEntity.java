@@ -11,6 +11,9 @@ import java.util.List;
 @Data
 public class StudentEntity extends PersonEntity{
     private List<Double> scores;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "grade_id")
+    private GradeEntity grade;
 
     public StudentEntity() {
         scores = new ArrayList<>();
