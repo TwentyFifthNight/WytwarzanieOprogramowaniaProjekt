@@ -1,15 +1,12 @@
 package com.example.schoolProject.service;
 
-import com.example.schoolProject.domain.GradeEntity;
 import com.example.schoolProject.domain.StudentEntity;
-import com.example.schoolProject.repository.GradeRepository;
 import com.example.schoolProject.repository.StudentRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -17,8 +14,6 @@ import java.util.Optional;
 public class StudentServiceImpl implements StudentService {
     @Autowired
     private StudentRepository studentRepository;
-    @Autowired
-    private GradeRepository gradeRepository;
 
     @Override
     public StudentEntity getStudentById(Long id) throws IllegalArgumentException {
@@ -26,11 +21,6 @@ public class StudentServiceImpl implements StudentService {
         if (student.isEmpty())
             throw new IllegalArgumentException("Student with given id not found!");
         return student.get();
-    }
-
-    @Override
-    public List<StudentEntity> getAllStudents() {
-        return studentRepository.findAll();
     }
 
     @Override
@@ -67,11 +57,6 @@ public class StudentServiceImpl implements StudentService {
         record.setName(student.getName());
         record.setPesel(student.getPesel());
         record.setScores(student.getScores());
-        GradeEntity grade = null;
-        if(student.getGrade() != null)
-            grade = gradeRepository.findById(student.getGrade().getId())
-                    .orElseThrow(() -> new IllegalArgumentException("Grade with given id not found"));
-        record.setGrade(grade);
-        return save(record);
+        return studentRepository.save(record);
     }
 }

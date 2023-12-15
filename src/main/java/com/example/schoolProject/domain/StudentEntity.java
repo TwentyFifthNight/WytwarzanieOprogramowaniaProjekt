@@ -1,6 +1,10 @@
 package com.example.schoolProject.domain;
 
-import jakarta.persistence.*;
+import com.fasterxml.jackson.annotation.JsonFilter;
+import jakarta.persistence.Entity;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 import lombok.Data;
 
 import java.util.ArrayList;
@@ -9,9 +13,10 @@ import java.util.List;
 @Entity
 @Table(name = "student")
 @Data
+@JsonFilter("fieldFilter")
 public class StudentEntity extends PersonEntity{
     private List<Double> scores;
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "grade_id")
     private GradeEntity grade;
 

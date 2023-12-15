@@ -8,4 +8,5 @@ public interface GradeService {
     GradeEntity save(GradeEntity grade);
     GradeEntity delete(Long id);
     GradeEntity update(Long id, GradeEntity grade);
+    GradeEntity addStudent(Long id, GradeEntity grade);
 }
