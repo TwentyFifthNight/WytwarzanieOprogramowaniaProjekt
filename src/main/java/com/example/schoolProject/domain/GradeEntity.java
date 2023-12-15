@@ -3,6 +3,7 @@ package com.example.schoolProject.domain;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -14,8 +15,13 @@ public class GradeEntity {
     private Long id;
     @Column(nullable = false)
     private String symbol;
-    @OneToMany(mappedBy = "grade", fetch = FetchType.LAZY)
+    @OneToMany(fetch = FetchType.LAZY)
+    @JoinColumn(name = "classroom_id")
     private List<StudentEntity> studentList;
-    @OneToOne
+    @OneToOne(mappedBy = "grade")
     private TeacherEntity tutor;
+
+    GradeEntity(){
+        studentList = new ArrayList<>();
+    }
 }

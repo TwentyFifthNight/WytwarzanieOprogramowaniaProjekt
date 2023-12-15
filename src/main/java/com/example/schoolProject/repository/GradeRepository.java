@@ -24,4 +24,5 @@ public interface GradeRepository extends JpaRepository<GradeEntity, Long> {
     List<StudentListRecord> findStudentListByGradeSymbol(@Param("symbol") String gradeSymbol);
 
     GradeEntity findBySymbol(String symbol);
+
 }

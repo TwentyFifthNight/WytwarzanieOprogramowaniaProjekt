@@ -68,6 +68,8 @@ public class StudentRestController {
             return new ResponseEntity<>(studentService.updateStudent(id, student), HttpStatus.OK);
         } catch (IllegalArgumentException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+        }catch (DataIntegrityViolationException e){
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 }

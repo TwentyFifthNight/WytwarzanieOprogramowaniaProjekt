@@ -24,6 +24,15 @@ public class GradeRestController {
         }
     }
 
+    @GetMapping("/studentList/{id}")
+    public ResponseEntity<Object> getGradeStudentList(@PathVariable("id") Long id){
+        try {
+            return new ResponseEntity<>(gradeService.findById(id).getStudentList(), HttpStatus.FOUND);
+        }catch (IllegalArgumentException e){
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+        }
+    }
+
     @GetMapping("/{id}")
     @ResponseBody
     public ResponseEntity<Object> getGrade(@PathVariable("id") Long id) {
